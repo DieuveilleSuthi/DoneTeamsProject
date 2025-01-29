@@ -8,9 +8,9 @@ import com.microsoft.playwright.Browser;
 import com.microsoft.playwright.BrowserType;
 import com.microsoft.playwright.Playwright;
 
-public class AddEmployeeTest {
+public class PromoteManagerTest {
     @Test
-    void test_add_employee() {
+    void test_promote_manager() {
         // Use playwright driver to get a browser and open a new page
         var playwright = Playwright.create();
         var launchOptions = new BrowserType.LaunchOptions().setHeadless(false)
@@ -68,6 +68,23 @@ public class AddEmployeeTest {
 
         // Check the new employee is there
         String selector = String.format("td:has-text('%s')", userName);
+        var isVisible = page.isVisible(selector);
+        assertTrue(isVisible);
+
+        // Edit employee
+        page.click("text='Edit'");
+        page.navigate("/employee/14");
+
+        // promote to manager
+        page.click("text='Promote as manager'");
+        page.navigate("/employee/14/promote")
+
+        // Check that the employee has been promoted
+        page.navigate("/employees");
+
+        // Check the new employee is there
+        String selector = String.format("td:has-text('%s')", userName);
+        String selector2 = String.format("td:has-text('%s')", userName.Manager);
         var isVisible = page.isVisible(selector);
         assertTrue(isVisible);
     }
