@@ -12,15 +12,9 @@ public class playRightTest {
           BrowserContext context = browser.newContext();
           Page page = context.newPage();
           page.navigate("https://d.se2.hr.dmerej.info/");
-          page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Add new employee")).click();
-          page.getByPlaceholder("Name").click();
-          page.getByPlaceholder("Name").fill("Tesst Team");
-          page.getByPlaceholder("Email").click();
-          page.getByPlaceholder("Email").fill("aezer");
-          page.navigate("https://d.se2.hr.dmerej.info/");
           page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Create new team")).click();
           page.locator("div").click();
-          page.getByPlaceholder("Name").fill("testTeam");
+          page.getByPlaceholder("Name").fill("addTeamtestName");
           page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Add")).click();
         }
       }
