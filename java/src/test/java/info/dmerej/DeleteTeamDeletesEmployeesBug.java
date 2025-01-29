@@ -35,7 +35,7 @@ public class DeleteTeamDeletesEmployeesBug {
             // Add the new employee to the team
             page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Edit")).last().click();
             page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Add to team")).click();
-            page.getByLabel("Team").selectOption("35"); // Incrémenter cette valeur !!
+            page.getByLabel("Team").selectOption("Bobteam team"); // Incrémenter cette valeur !!
             page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Add")).click();
             page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Home")).click();
 
