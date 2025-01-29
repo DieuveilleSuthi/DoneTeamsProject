@@ -7,11 +7,15 @@ public class DeleteTeamDeletesEmployeesBug {
     public static void main(String[] args) {
         try (Playwright playwright = Playwright.create()) {
             var launchOptions = new BrowserType.LaunchOptions().setHeadless(false)
-                    .setSlowMo(1000); // Remove this when you're done debugging
+                    .setSlowMo(500); // Remove this when you're done debugging
             Browser browser = playwright.chromium().launch(launchOptions);
             BrowserContext context = browser.newContext();
             Page page = context.newPage();
             page.navigate("https://d.se2.hr.dmerej.info/");
+
+            // Reset database
+            page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Reset database")).click();
+            page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Proceed")).click();
 
             // Add a new team
             page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Create new team")).click();
