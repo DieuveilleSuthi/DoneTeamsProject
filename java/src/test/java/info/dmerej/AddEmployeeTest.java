@@ -10,7 +10,7 @@ import com.microsoft.playwright.Playwright;
 
 public class AddEmployeeTest {
     @Test
-    void test_promote_manager() {
+    void test_add_employee() {
         // Use playwright driver to get a browser and open a new page
         var playwright = Playwright.create();
         var launchOptions = new BrowserType.LaunchOptions().setHeadless(false)
