@@ -21,6 +21,8 @@ public class HiringDateTest {
             TeamPage teamPage = new TeamPage(page);
 
             homePage.navigate();
+            homePage.resetDatabase();
+            homePage.navigate();
             homePage.goToCreateNewTeam();
             teamPage.createNewTeam("Bobteam");
             homePage.navigate();
@@ -41,6 +43,9 @@ public class HiringDateTest {
             LocalDate today = LocalDate.now();
 
             assertTrue(hiringDate.isBefore(today) || hiringDate.isEqual(today));
+
+            homePage.navigate();
+            homePage.resetDatabase();
 
             browser.close();
         }

@@ -33,11 +33,13 @@ public class DeleteTeamDeletesEmployeesBug {
             homePage.goToListTeams();
             teamPage.deleteFirstTeam();
 
+            homePage.navigate();
             homePage.goToListTeams();
-            homePage.resetDatabase();
             assertFalse(teamPage.isTeamVisible("Bobteam"));
 
             assertTrue(employeePage.isEmployeeVisible("Bob"));
+            homePage.navigate();
+            homePage.resetDatabase();
 
             browser.close();
         }
