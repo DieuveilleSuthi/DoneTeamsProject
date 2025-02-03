@@ -1,12 +1,8 @@
 package info.dmerej;
 
-import com.microsoft.playwright.Browser;
-import com.microsoft.playwright.BrowserType;
-import com.microsoft.playwright.Page;
-import com.microsoft.playwright.Playwright;
+import com.microsoft.playwright.*;
 import com.microsoft.playwright.options.AriaRole;
 import org.junit.jupiter.api.Test;
-
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -14,47 +10,53 @@ import java.time.format.DateTimeFormatter;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class HiringDateTest {
-
     @Test
     public void setUp() {
-        // Use playwright driver to get a browser and open a new page
-        var playwright = Playwright.create();
-        var launchOptions = new BrowserType.LaunchOptions().setHeadless(false)
-            .setSlowMo(1000); // Remove this when you're done debugging
-        var browser = playwright.chromium().launch(launchOptions);
+        try (Playwright playwright = Playwright.create()) {
+            var launchOptions = new BrowserType.LaunchOptions().setHeadless(false).setSlowMo(1000);
+            Browser browser = playwright.chromium().launch(launchOptions);
+            BrowserContext context = browser.newContext();
+            Page page = context.newPage();
+            page.navigate("https://d.se2.hr.dmerej.info/");
 
-        // Set base URL for the new context
-        var contextOptions = new Browser.NewContextOptions();
-        // TODO: fix the URL
-        contextOptions.setBaseURL("https://d.se2.hr.dmerej.info");
-        var context = browser.newContext(contextOptions);
+            // Ajouter une nouvelle équipe
+            page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Create new team")).click();
+            page.getByPlaceholder("Name").fill("Bobteam");
+            page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Add")).click();
+            page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Home")).click();
 
-        var page = context.newPage();
-        // Aller à la page d'accueil
-        page.navigate("https://d.se2.hr.dmerej.info/");
+            // Ajouter un nouvel employé
+            page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Add new employee")).click();
+            page.getByPlaceholder("Name").fill("Bob");
+            page.getByPlaceholder("Email").fill("bob@gmail.com");
+            page.locator("#id_address_line1").fill("20 Bobstreet");
+            page.getByPlaceholder("City").fill("Bobville");
+            page.getByPlaceholder("Zip code").fill("1234");
+            page.getByPlaceholder("Hiring date").fill("2025-03-03");
+            page.getByPlaceholder("Job title").fill("Dev");
+            page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Add")).click();
 
-        // Aller dans la liste des employés et éditer le premier
-        page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("List employees")).click();
-        page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Edit")).first().click();
+            // Ajouter l'employé à l'équipe Bobteam
+            page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Edit")).last().click();
+            page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Add to team")).click();
+            page.getByLabel("Team").selectOption("Bobteam team");
+            page.getByRole(AriaRole.BUTTON, new Page.GetByRoleOptions().setName("Add")).click();
+            page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Home")).click();
 
-        // Aller à la page de mise à jour du contrat
-        page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Update contract")).click();
+            // Vérifier la date d'embauche de l'employé
+            page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("List employees")).click();
+            page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Edit")).first().click();
+            page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Update contract")).click();
 
-        // Vérifier que le champ "Hiring date" est visible
-        assertTrue(page.getByPlaceholder("Hiring date").isVisible());
+            assertTrue(page.getByPlaceholder("Hiring date").isVisible());
+            String hiringDateStr = page.getByPlaceholder("Hiring date").inputValue();
+            LocalDate hiringDate = LocalDate.parse(hiringDateStr, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            LocalDate today = LocalDate.now();
 
-        // Récupérer la valeur du champ "Hiring date"
-        String hiringDateStr = page.getByPlaceholder("Hiring date").inputValue();
+            assertTrue(hiringDate.isBefore(today) || hiringDate.isEqual(today));
+            System.out.println("Test réussi : La date d'embauche est valide.");
 
-        // Convertir la date en format LocalDate
-        LocalDate hiringDate = LocalDate.parse(hiringDateStr, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-
-        // Récupérer la date actuelle
-        LocalDate today = LocalDate.now();
-
-        // Vérifier que la date d'embauche n'est pas dans le futur
-        assertTrue(hiringDate.isBefore(today) || hiringDate.isEqual(today));
-
-        System.out.println("Test réussi : La date d'embauche est valide.");
+            browser.close();
+        }
     }
 }
