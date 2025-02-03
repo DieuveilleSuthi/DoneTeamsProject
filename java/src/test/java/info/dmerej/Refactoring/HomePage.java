@@ -34,5 +34,8 @@ public class HomePage {
     public void goToListTeams() {
         page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("List teams")).click();
     }
-}
 
+    public void goToHome() {
+        page.getByRole(AriaRole.LINK, new Page.GetByRoleOptions().setName("Home")).click();
+    }
+}
