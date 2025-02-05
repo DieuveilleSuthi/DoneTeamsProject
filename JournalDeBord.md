@@ -1,4 +1,4 @@
-// Day 1  
+# Day 1  
 For this session, we manually tested the website. To speed up the process, we divided our work into four parts for the 4 members of our group.  
 
 ### Issues encountered:  
@@ -6,7 +6,7 @@ For this session, we manually tested the website. To speed up the process, we di
 - Lack of methodology in task distribution, causing overlaps in testing.  
 
 
-// Day 2  
+# Day 2  
 For this session, we first generated a test script using Playwright. Then, we wrote three automated tests, resetting the database after each test.  
 
 ### Issues encountered:  
@@ -14,7 +14,7 @@ For this session, we first generated a test script using Playwright. Then, we wr
 - Some tests failed randomly due to a data synchronization issue.  
 
 
-// Day 3
+#Day 3
 For this session, we first continued the refactoring of our code by creating the EmployeePage, HomePage and TeamPage files concerning the codes and steps common to all our tests which are in dmerej foder. Next we make a list of the advantages and disadvantages of resetting the database, the details of which are in the following lines.
 
 List of pros and cons of resetting the database between each test:
